@@ -2,6 +2,7 @@ import { Download, Save, Undo2, Redo2, Settings } from "lucide-react";
 
 interface TopBarProps {
   onExport: () => void;
+  onSave?: () => void;
 }
 
 const TopBar = ({ onExport }: TopBarProps) => {
