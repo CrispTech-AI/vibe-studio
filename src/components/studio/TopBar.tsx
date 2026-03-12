@@ -24,7 +24,7 @@ const TopBar = ({ onExport, onSave }: TopBarProps) => {
           <Redo2 size={15} />
         </button>
         <span className="text-border mx-1">|</span>
-        <button className="studio-btn-ghost flex items-center gap-1.5">
+        <button onClick={onSave} className="studio-btn-ghost flex items-center gap-1.5">
           <Save size={14} />
           <span className="text-xs">Save</span>
         </button>
