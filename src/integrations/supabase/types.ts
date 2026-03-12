@@ -14,7 +14,113 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      generated_tracks: {
+        Row: {
+          ai_response: string | null
+          created_at: string
+          genre: string | null
+          id: string
+          lyrics_suggestion: string | null
+          project_id: string
+          prompt: string
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          ai_response?: string | null
+          created_at?: string
+          genre?: string | null
+          id?: string
+          lyrics_suggestion?: string | null
+          project_id: string
+          prompt: string
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          ai_response?: string | null
+          created_at?: string
+          genre?: string | null
+          id?: string
+          lyrics_suggestion?: string | null
+          project_id?: string
+          prompt?: string
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generated_tracks_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          ai_generated_audio_url: string | null
+          ai_generated_bg_url: string | null
+          aspect_ratio: string | null
+          audio_prompt: string | null
+          avatar_style: string | null
+          bg_prompt: string | null
+          bg_style: string | null
+          created_at: string
+          genre: string | null
+          id: string
+          lip_sync_enabled: boolean | null
+          lyrics: string | null
+          status: string | null
+          title: string
+          updated_at: string
+          uploaded_audio_url: string | null
+          uploaded_bg_url: string | null
+          user_id: string
+        }
+        Insert: {
+          ai_generated_audio_url?: string | null
+          ai_generated_bg_url?: string | null
+          aspect_ratio?: string | null
+          audio_prompt?: string | null
+          avatar_style?: string | null
+          bg_prompt?: string | null
+          bg_style?: string | null
+          created_at?: string
+          genre?: string | null
+          id?: string
+          lip_sync_enabled?: boolean | null
+          lyrics?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+          uploaded_audio_url?: string | null
+          uploaded_bg_url?: string | null
+          user_id: string
+        }
+        Update: {
+          ai_generated_audio_url?: string | null
+          ai_generated_bg_url?: string | null
+          aspect_ratio?: string | null
+          audio_prompt?: string | null
+          avatar_style?: string | null
+          bg_prompt?: string | null
+          bg_style?: string | null
+          created_at?: string
+          genre?: string | null
+          id?: string
+          lip_sync_enabled?: boolean | null
+          lyrics?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+          uploaded_audio_url?: string | null
+          uploaded_bg_url?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
