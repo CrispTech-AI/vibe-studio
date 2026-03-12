@@ -5,7 +5,7 @@ interface TopBarProps {
   onSave?: () => void;
 }
 
-const TopBar = ({ onExport }: TopBarProps) => {
+const TopBar = ({ onExport, onSave }: TopBarProps) => {
   return (
     <div className="h-12 border-b border-border bg-card flex items-center justify-between px-4">
       <div className="flex items-center gap-3">
