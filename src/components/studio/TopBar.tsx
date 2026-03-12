@@ -2,9 +2,10 @@ import { Download, Save, Undo2, Redo2, Settings } from "lucide-react";
 
 interface TopBarProps {
   onExport: () => void;
+  onSave?: () => void;
 }
 
-const TopBar = ({ onExport }: TopBarProps) => {
+const TopBar = ({ onExport, onSave }: TopBarProps) => {
   return (
     <div className="h-12 border-b border-border bg-card flex items-center justify-between px-4">
       <div className="flex items-center gap-3">
@@ -23,7 +24,7 @@ const TopBar = ({ onExport }: TopBarProps) => {
           <Redo2 size={15} />
         </button>
         <span className="text-border mx-1">|</span>
-        <button className="studio-btn-ghost flex items-center gap-1.5">
+        <button onClick={onSave} className="studio-btn-ghost flex items-center gap-1.5">
           <Save size={14} />
           <span className="text-xs">Save</span>
         </button>
