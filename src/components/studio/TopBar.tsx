@@ -37,6 +37,9 @@ const TopBar = ({ onExport, onSave }: TopBarProps) => {
           <Download size={14} />
           <span className="text-xs">Export</span>
         </button>
+        <button onClick={signOut} className="studio-btn-ghost flex items-center gap-1.5 ml-1" title="Sign out">
+          <LogOut size={14} />
+        </button>
       </div>
     </div>
   );
