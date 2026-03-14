@@ -41,7 +41,7 @@ export function useProject(projectId?: string) {
       .from("projects")
       .select("*")
       .eq("id", projectId)
-      .single()
+      .maybeSingle()
       .then(({ data, error }) => {
         if (error || !data) {
           toast.error("Project not found");
