@@ -1,4 +1,5 @@
-import { Download, Save, Undo2, Redo2, Settings } from "lucide-react";
+import { Download, Save, Undo2, Redo2, Settings, LogOut } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface TopBarProps {
   onExport: () => void;
@@ -6,6 +7,7 @@ interface TopBarProps {
 }
 
 const TopBar = ({ onExport, onSave }: TopBarProps) => {
+  const { signOut } = useAuth();
   return (
     <div className="h-12 border-b border-border bg-card flex items-center justify-between px-4">
       <div className="flex items-center gap-3">
