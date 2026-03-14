@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -27,11 +27,41 @@ const defaultProject: ProjectState = {
   avatarStyle: "realistic",
 };
 
-export function useProject() {
+export function useProject(projectId?: string) {
   const [project, setProject] = useState<ProjectState>(defaultProject);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedContent, setGeneratedContent] = useState<string>("");
   const [generationType, setGenerationType] = useState<string>("");
+  const [loadingProject, setLoadingProject] = useState(!!projectId);
+
+  useEffect(() => {
+    if (!projectId) return;
+    setLoadingProject(true);
+    supabase
+      .from("projects")
+      .select("*")
+      .eq("id", projectId)
+      .single()
+      .then(({ data, error }) => {
+        if (error || !data) {
+          toast.error("Project not found");
+        } else {
+          setProject({
+            id: data.id,
+            title: data.title,
+            genre: data.genre ?? "pop",
+            audioPrompt: data.audio_prompt ?? "",
+            bgPrompt: data.bg_prompt ?? "",
+            bgStyle: data.bg_style ?? "",
+            lyrics: data.lyrics ?? "",
+            aspectRatio: data.aspect_ratio ?? "9:16",
+            lipSyncEnabled: data.lip_sync_enabled ?? false,
+            avatarStyle: data.avatar_style ?? "realistic",
+          });
+        }
+        setLoadingProject(false);
+      });
+  }, [projectId]);
 
   const updateProject = useCallback((updates: Partial<ProjectState>) => {
     setProject((prev) => ({ ...prev, ...updates }));
@@ -103,5 +133,5 @@ export function useProject() {
     }
   }, [project, updateProject]);
 
-  return { project, updateProject, saveProject, generateAI, isGenerating, generatedContent, generationType };
+  return { project, updateProject, saveProject, generateAI, isGenerating, generatedContent, generationType, loadingProject };
 }
