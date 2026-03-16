@@ -1,5 +1,6 @@
-import { Download, Save, Undo2, Redo2, Settings, LogOut } from "lucide-react";
+import { Download, Save, Undo2, Redo2, Settings, LogOut, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 interface TopBarProps {
   onExport: () => void;
