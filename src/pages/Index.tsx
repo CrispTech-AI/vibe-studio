@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import TopBar from "@/components/studio/TopBar";
 import LeftSidebar from "@/components/studio/LeftSidebar";
@@ -8,10 +8,49 @@ import ExportModal from "@/components/studio/ExportModal";
 import { useProject } from "@/hooks/useProject";
 import { Loader2 } from "lucide-react";
 
+const TOTAL_TIME = 195; // 3:15
+
 const Index = () => {
   const { projectId } = useParams<{ projectId?: string }>();
   const [exportOpen, setExportOpen] = useState(false);
   const projectHook = useProject(projectId);
+
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const animRef = useRef<number>();
+  const lastFrameRef = useRef<number>(0);
+
+  // Simulated playback loop
+  useEffect(() => {
+    if (!isPlaying) {
+      if (animRef.current) cancelAnimationFrame(animRef.current);
+      return;
+    }
+    lastFrameRef.current = performance.now();
+    const tick = (now: number) => {
+      const delta = (now - lastFrameRef.current) / 1000;
+      lastFrameRef.current = now;
+      setCurrentTime((prev) => {
+        const next = prev + delta;
+        if (next >= TOTAL_TIME) {
+          setIsPlaying(false);
+          return TOTAL_TIME;
+        }
+        return next;
+      });
+      animRef.current = requestAnimationFrame(tick);
+    };
+    animRef.current = requestAnimationFrame(tick);
+    return () => { if (animRef.current) cancelAnimationFrame(animRef.current); };
+  }, [isPlaying]);
+
+  const handleSeek = useCallback((time: number) => {
+    setCurrentTime(Math.max(0, Math.min(TOTAL_TIME, time)));
+  }, []);
+
+  const handlePlayPause = useCallback(() => {
+    setIsPlaying((p) => !p);
+  }, []);
 
   if (projectHook.loadingProject) {
     return (
@@ -33,9 +72,15 @@ const Index = () => {
           generatedContent={projectHook.generatedContent}
           generationType={projectHook.generationType}
         />
-        <VideoCanvas />
+        <VideoCanvas
+          currentTime={currentTime}
+          totalTime={TOTAL_TIME}
+          isPlaying={isPlaying}
+          onPlayPause={handlePlayPause}
+          onSeek={handleSeek}
+        />
       </div>
-      <Timeline />
+      <Timeline currentTime={currentTime} totalTime={TOTAL_TIME} onSeek={handleSeek} />
       <ExportModal open={exportOpen} onClose={() => setExportOpen(false)} />
     </div>
   );
