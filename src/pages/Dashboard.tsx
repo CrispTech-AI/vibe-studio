@@ -51,6 +51,34 @@ const Dashboard = () => {
     setDeleting(null);
   };
 
+  const startRenaming = (e: React.MouseEvent, project: Project) => {
+    e.stopPropagation();
+    setEditingId(project.id);
+    setEditTitle(project.title);
+    setTimeout(() => inputRef.current?.focus(), 0);
+  };
+
+  const commitRename = async () => {
+    if (!editingId) return;
+    const trimmed = editTitle.trim();
+    if (!trimmed) {
+      setEditingId(null);
+      return;
+    }
+    const { error } = await supabase
+      .from("projects")
+      .update({ title: trimmed })
+      .eq("id", editingId);
+    if (error) {
+      toast.error("Failed to rename project");
+    } else {
+      setProjects((prev) =>
+        prev.map((p) => (p.id === editingId ? { ...p, title: trimmed } : p))
+      );
+    }
+    setEditingId(null);
+  };
+
   const openProject = (id: string) => {
     navigate(`/studio/${id}`);
   };
