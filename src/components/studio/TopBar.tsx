@@ -1,5 +1,6 @@
-import { Download, Save, Undo2, Redo2, Settings, LogOut } from "lucide-react";
+import { Download, Save, Undo2, Redo2, Settings, LogOut, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 interface TopBarProps {
   onExport: () => void;
@@ -8,9 +9,18 @@ interface TopBarProps {
 
 const TopBar = ({ onExport, onSave }: TopBarProps) => {
   const { signOut } = useAuth();
+  const navigate = useNavigate();
   return (
     <div className="h-12 border-b border-border bg-card flex items-center justify-between px-4">
       <div className="flex items-center gap-3">
+        <button
+          onClick={() => navigate("/")}
+          className="studio-btn-ghost flex items-center gap-1"
+          title="Back to Dashboard"
+        >
+          <ArrowLeft size={15} />
+        </button>
+        <span className="text-border">|</span>
         <h1 className="font-display text-sm font-bold tracking-tight">
           <span className="text-primary">VOXSTUDIO</span>
         </h1>
