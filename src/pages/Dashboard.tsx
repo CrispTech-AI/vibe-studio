@@ -133,9 +133,29 @@ const Dashboard = () => {
               >
                 <CardContent className="flex items-center justify-between p-4">
                   <div className="min-w-0 flex-1">
-                    <p className="font-medium text-foreground truncate">
-                      {p.title}
-                    </p>
+                    {editingId === p.id ? (
+                      <Input
+                        ref={inputRef}
+                        value={editTitle}
+                        onChange={(e) => setEditTitle(e.target.value)}
+                        onBlur={commitRename}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") commitRename();
+                          if (e.key === "Escape") setEditingId(null);
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                        className="h-7 text-sm font-medium"
+                      />
+                    ) : (
+                      <p
+                        className="font-medium text-foreground truncate cursor-text hover:text-primary transition-colors inline-flex items-center gap-1.5 group/title"
+                        onClick={(e) => startRenaming(e, p)}
+                        title="Click to rename"
+                      >
+                        {p.title}
+                        <Pencil size={12} className="text-muted-foreground opacity-0 group-hover/title:opacity-100 transition-opacity shrink-0" />
+                      </p>
+                    )}
                     <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
                       {p.genre && (
                         <span className="bg-muted px-2 py-0.5 rounded">
