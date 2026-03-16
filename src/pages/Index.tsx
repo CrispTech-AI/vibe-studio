@@ -44,6 +44,27 @@ const Index = () => {
     return () => { if (animRef.current) cancelAnimationFrame(animRef.current); };
   }, [isPlaying]);
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+
+      if (e.code === "Space") {
+        e.preventDefault();
+        setIsPlaying((p) => !p);
+      } else if (e.code === "ArrowLeft") {
+        e.preventDefault();
+        setCurrentTime((prev) => Math.max(0, prev - 5));
+      } else if (e.code === "ArrowRight") {
+        e.preventDefault();
+        setCurrentTime((prev) => Math.min(TOTAL_TIME, prev + 5));
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
   const handleSeek = useCallback((time: number) => {
     setCurrentTime(Math.max(0, Math.min(TOTAL_TIME, time)));
   }, []);
