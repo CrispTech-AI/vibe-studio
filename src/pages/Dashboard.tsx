@@ -5,7 +5,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Plus, Music, Trash2, LogOut, Loader2, Pencil } from "lucide-react";
+import { Plus, Music, Trash2, LogOut, Loader2, Pencil, Download } from "lucide-react";
+
 import { toast } from "sonner";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -94,9 +95,14 @@ const Dashboard = () => {
         <h1 className="font-display text-xl font-bold text-foreground tracking-tight">
           VOXSTUDIO
         </h1>
-        <Button variant="ghost" size="sm" onClick={signOut}>
-          <LogOut className="w-4 h-4 mr-1" /> Sign out
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={() => navigate("/install")} className="gap-1.5">
+            <Download className="w-4 h-4" /> Install App
+          </Button>
+          <Button variant="ghost" size="sm" onClick={signOut}>
+            <LogOut className="w-4 h-4 mr-1" /> Sign out
+          </Button>
+        </div>
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
