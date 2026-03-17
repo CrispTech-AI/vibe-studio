@@ -5,7 +5,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Plus, Music, Trash2, LogOut, Loader2, Pencil } from "lucide-react";
+import { Plus, Music, Trash2, LogOut, Loader2, Pencil, Download } from "lucide-react";
+import { useNavigate as useNav } from "react-router-dom";
 import { toast } from "sonner";
 import type { Tables } from "@/integrations/supabase/types";
 
