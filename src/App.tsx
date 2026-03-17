@@ -31,6 +31,7 @@ const App = () => (
             <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/studio" element={<ProtectedRoute><Index /></ProtectedRoute>} />
             <Route path="/studio/:projectId" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+            <Route path="/install" element={<Install />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
