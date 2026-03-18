@@ -38,8 +38,8 @@ const Install = () => {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
       <div className="max-w-md w-full text-center space-y-8">
-        <img src="/pwa-icon-512.png" alt="Vibe Studio" className="w-24 h-24 mx-auto rounded-2xl shadow-lg" />
-        <h1 className="text-3xl font-bold text-foreground">Install Vibe Studio</h1>
+        <img src="/pwa-icon-512.png" alt="VibeForge Studio" className="w-24 h-24 mx-auto rounded-2xl shadow-lg" />
+        <h1 className="text-3xl font-bold text-foreground">Install VibeForge Studio</h1>
         <p className="text-muted-foreground">
           Get the full app experience — instant launch from your home screen, fullscreen mode, and offline access.
         </p>

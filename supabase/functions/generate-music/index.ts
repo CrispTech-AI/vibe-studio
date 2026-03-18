@@ -11,8 +11,8 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    const CRISPTECH_AIE_API_KEY = Deno.env.get("CRISPTECH_AIE_API_KEY");
+    if (!CRISPTECH_AIE_API_KEY) throw new Error("CRISPTECH_AIE_API_KEY is not configured");
 
     const authHeader = req.headers.get("Authorization");
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -53,10 +53,10 @@ Help the user with their creative vision. Be detailed and inspiring.`;
       userPrompt = prompt;
     }
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const response = await fetch("https://ai.gateway.synergylabs.ai/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        Authorization: `Bearer ${CRISPTECH_AIE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
