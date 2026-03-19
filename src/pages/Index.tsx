@@ -104,6 +104,9 @@ const Index = () => {
           isPlaying={isPlaying}
           onPlayPause={handlePlayPause}
           onSeek={handleSeek}
+
+          // 🔥 ADD THESE
+          project={projectHook.project}
         />
       </div>
       <Timeline currentTime={currentTime} totalTime={TOTAL_TIME} onSeek={handleSeek} />
