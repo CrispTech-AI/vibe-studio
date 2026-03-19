@@ -83,7 +83,12 @@ const Index = () => {
 
   return (
     <div className="h-screen flex flex-col overflow-hidden">
-      <TopBar onExport={() => setExportOpen(true)} onSave={projectHook.saveProject} />
+      <TopBar
+        onExport={() => setExportOpen(true)}
+        onSave={projectHook.saveProject}
+        projectTitle={projectHook.project.title}
+        onTitleChange={(title) => projectHook.updateProject({ title })}
+      />
       <div className="flex flex-1 min-h-0">
         <LeftSidebar
           project={projectHook.project}

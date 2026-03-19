@@ -1,7 +1,9 @@
-import { Music, Image, Type, Sparkles, Upload, ChevronDown, Loader2 } from "lucide-react";
+import { Music, Image, Type, Sparkles, Loader2, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import type { ProjectState } from "@/hooks/useProject";
+import FileUploadButton from "./FileUploadButton";
+import AudioPlayer from "./AudioPlayer";
 
 type Tab = "audio" | "background" | "lyrics";
 
@@ -16,6 +18,18 @@ interface LeftSidebarProps {
 
 const LeftSidebar = ({ project, onUpdate, onGenerate, isGenerating, generatedContent, generationType }: LeftSidebarProps) => {
   const [activeTab, setActiveTab] = useState<Tab>("audio");
+  const [audioFile, setAudioFile] = useState<{ url: string; name: string } | null>(null);
+  const [bgFile, setBgFile] = useState<{ url: string; name: string; type: string } | null>(null);
+
+  const handleAudioUpload = (file: File) => {
+    const url = URL.createObjectURL(file);
+    setAudioFile({ url, name: file.name });
+  };
+
+  const handleBgUpload = (file: File) => {
+    const url = URL.createObjectURL(file);
+    setBgFile({ url, name: file.name, type: file.type });
+  };
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: "audio", label: "Audio", icon: <Music size={16} /> },
@@ -87,11 +101,19 @@ const LeftSidebar = ({ project, onUpdate, onGenerate, isGenerating, generatedCon
               </div>
             )}
 
-            <div className="border-t border-border pt-4">
-              <button className="studio-btn-ghost w-full flex items-center justify-center gap-2">
-                <Upload size={14} />
-                Upload Audio File
-              </button>
+            <div className="border-t border-border pt-4 space-y-3">
+              <FileUploadButton
+                accept="audio/*"
+                label="Upload Audio File"
+                onFileSelected={handleAudioUpload}
+              />
+              {audioFile && (
+                <AudioPlayer
+                  src={audioFile.url}
+                  fileName={audioFile.name}
+                  onRemove={() => { URL.revokeObjectURL(audioFile.url); setAudioFile(null); }}
+                />
+              )}
             </div>
           </motion.div>
         )}
@@ -142,10 +164,29 @@ const LeftSidebar = ({ project, onUpdate, onGenerate, isGenerating, generatedCon
               </div>
             )}
 
-            <button className="studio-btn-ghost w-full flex items-center justify-center gap-2">
-              <Upload size={14} />
-              Upload Image/Video
-            </button>
+            <div className="border-t border-border pt-4 space-y-3">
+              <FileUploadButton
+                accept="image/*,video/*"
+                label="Upload Image / Video"
+                onFileSelected={handleBgUpload}
+              />
+              {bgFile && (
+                <div className="studio-panel p-2 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-foreground truncate max-w-[180px]">{bgFile.name}</span>
+                    <button
+                      onClick={() => { URL.revokeObjectURL(bgFile.url); setBgFile(null); }}
+                      className="text-muted-foreground hover:text-destructive text-xs"
+                    >✕</button>
+                  </div>
+                  {bgFile.type.startsWith("image/") ? (
+                    <img src={bgFile.url} alt="Background preview" className="w-full rounded object-cover max-h-32" />
+                  ) : (
+                    <video src={bgFile.url} className="w-full rounded max-h-32" controls muted />
+                  )}
+                </div>
+              )}
+            </div>
           </motion.div>
         )}
 
