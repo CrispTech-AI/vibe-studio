@@ -1,11 +1,13 @@
+import { useState } from "react";
 import { Play, Pause, SkipBack, SkipForward, Maximize2, Volume2 } from "lucide-react";
 
-type AspectRatio = "9:16" | "1:1" | "16:9";
+type AspectRatio = "9:16" | "1:1" | "16:9" | "4:5";
 
-const aspectStyles: Record<AspectRatio, { width: string; label: string; platform: string }> = {
-  "9:16": { width: "aspect-[9/16] max-h-[420px]", label: "9:16", platform: "TikTok / Reels" },
-  "1:1": { width: "aspect-square max-h-[420px]", label: "1:1", platform: "Instagram" },
-  "16:9": { width: "aspect-video max-h-[360px]", label: "16:9", platform: "YouTube" },
+const aspectStyles: Record<AspectRatio, { css: string; label: string; platforms: string }> = {
+  "9:16": { css: "aspect-[9/16] max-h-[420px]", label: "9:16", platforms: "TikTok · Reels · Shorts" },
+  "1:1": { css: "aspect-square max-h-[420px]", label: "1:1", platforms: "Instagram Post" },
+  "4:5": { css: "aspect-[4/5] max-h-[420px]", label: "4:5", platforms: "Facebook · Pinterest" },
+  "16:9": { css: "aspect-video max-h-[360px]", label: "16:9", platforms: "YouTube · Twitter" },
 };
 
 interface VideoCanvasProps {
@@ -17,7 +19,7 @@ interface VideoCanvasProps {
 }
 
 const VideoCanvas = ({ currentTime, totalTime, isPlaying, onPlayPause, onSeek }: VideoCanvasProps) => {
-  const aspect: AspectRatio = "9:16";
+  const [aspect, setAspect] = useState<AspectRatio>("9:16");
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
@@ -28,21 +30,22 @@ const VideoCanvas = ({ currentTime, totalTime, isPlaying, onPlayPause, onSeek }:
   return (
     <div className="flex-1 flex flex-col items-center justify-center bg-background p-6 gap-4 min-w-0">
       {/* Aspect ratio selector */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-wrap justify-center">
         {(Object.keys(aspectStyles) as AspectRatio[]).map((r) => (
           <button
             key={r}
+            onClick={() => setAspect(r)}
             className={r === aspect ? "aspect-chip-active" : "aspect-chip-inactive"}
           >
             {aspectStyles[r].label}
-            <span className="ml-1 opacity-60">{aspectStyles[r].platform}</span>
+            <span className="ml-1 opacity-60 hidden sm:inline">{aspectStyles[r].platforms}</span>
           </button>
         ))}
       </div>
 
       {/* Video preview */}
       <div
-        className={`${aspectStyles[aspect].width} w-full max-w-md bg-card rounded-lg border border-border flex items-center justify-center relative overflow-hidden`}
+        className={`${aspectStyles[aspect].css} w-full max-w-md bg-card rounded-lg border border-border flex items-center justify-center relative overflow-hidden transition-all duration-300`}
       >
         <div className="absolute inset-0 bg-gradient-to-br from-neon-purple/20 via-background to-neon-green/10" />
         <div className="relative z-10 text-center space-y-2">
@@ -55,6 +58,10 @@ const VideoCanvas = ({ currentTime, totalTime, isPlaying, onPlayPause, onSeek }:
           <p className="text-foreground font-display text-lg font-semibold drop-shadow-lg px-4">
             ♪ Your lyrics appear here ♪
           </p>
+        </div>
+        {/* Ratio badge */}
+        <div className="absolute top-2 right-2 bg-card/80 backdrop-blur-sm border border-border rounded px-1.5 py-0.5">
+          <span className="text-[9px] text-muted-foreground font-mono">{aspectStyles[aspect].label}</span>
         </div>
       </div>
 
