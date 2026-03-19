@@ -47,7 +47,7 @@ const Auth = () => {
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center gap-2">
             <Music className="text-primary" size={28} />
-            <h1 className="font-display text-2xl font-bold text-primary">VOXSTUDIO</h1>
+            <h1 className="font-display text-2xl font-bold text-primary">VibeForge Studio</h1>
           </div>
           <p className="text-sm text-muted-foreground">
             {isLogin ? "Sign in to your studio" : "Create your studio account"}

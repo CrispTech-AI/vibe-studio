@@ -93,7 +93,7 @@ const Dashboard = () => {
       {/* Header */}
       <header className="border-b border-border px-6 py-4 flex items-center justify-between">
         <h1 className="font-display text-xl font-bold text-foreground tracking-tight">
-          VOXSTUDIO
+          VibeForge Studio
         </h1>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={() => navigate("/install")} className="gap-1.5">
