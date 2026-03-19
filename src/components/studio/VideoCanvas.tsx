@@ -3,6 +3,16 @@ import { Play, Pause, SkipBack, SkipForward, Maximize2, Volume2 } from "lucide-r
 
 type AspectRatio = "9:16" | "1:1" | "16:9" | "4:5";
 
+const handleToggle = () => {
+  if (!audioRef.current || !project?.audio_url) return;
+
+  if (audioRef.current.paused) {
+    audioRef.current.play();
+  } else {
+    audioRef.current.pause();
+  }
+};
+
 const aspectStyles: Record<AspectRatio, { css: string; label: string; platforms: string }> = {
   "9:16": { css: "aspect-[9/16] max-h-[420px]", label: "9:16", platforms: "TikTok · Reels · Shorts" },
   "1:1": { css: "aspect-square max-h-[420px]", label: "1:1", platforms: "Instagram Post" },
@@ -16,7 +26,8 @@ interface VideoCanvasProps {
   isPlaying: boolean;
   onPlayPause: () => void;
   onSeek: (time: number) => void;
-}
+  project: any;
+};
 
 const VideoCanvas = ({ currentTime, totalTime, isPlaying, onPlayPause, onSeek }: VideoCanvasProps) => {
   const [aspect, setAspect] = useState<AspectRatio>("9:16");
@@ -47,23 +58,32 @@ const VideoCanvas = ({ currentTime, totalTime, isPlaying, onPlayPause, onSeek }:
       <div
         className={`${aspectStyles[aspect].css} w-full max-w-md bg-card rounded-lg border border-border flex items-center justify-center relative overflow-hidden transition-all duration-300`}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-neon-purple/20 via-background to-neon-green/10" />
-        <div className="relative z-10 text-center space-y-2">
-          <div className="w-16 h-16 rounded-full border-2 border-primary/40 flex items-center justify-center mx-auto">
-            <Play size={24} className="text-primary ml-1" />
-          </div>
-          <p className="text-xs text-muted-foreground">Preview will appear here</p>
-        </div>
-        <div className="absolute bottom-8 left-0 right-0 text-center">
-          <p className="text-foreground font-display text-lg font-semibold drop-shadow-lg px-4">
-            ♪ Your lyrics appear here ♪
-          </p>
-        </div>
-        {/* Ratio badge */}
-        <div className="absolute top-2 right-2 bg-card/80 backdrop-blur-sm border border-border rounded px-1.5 py-0.5">
-          <span className="text-[9px] text-muted-foreground font-mono">{aspectStyles[aspect].label}</span>
-        </div>
-      </div>
+      <div className="relative w-full h-full overflow-hidden rounded-2xl border border-white/10 bg-black/30">
+
+  {project?.cover_image ? (
+    <img
+      src={project.cover_image}
+      className="absolute inset-0 w-full h-full object-cover"
+    />
+  ) : (
+    <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/20 via-purple-500/10 to-cyan-500/20" />
+  )}
+
+  <div className="relative z-10 flex h-full flex-col items-center justify-center text-center p-6">
+    
+    <div className="text-xs text-white/60 mb-2">
+      {project?.format || "Preview"}
+    </div>
+
+    <h2 className="text-2xl font-semibold text-white mb-2">
+      {project?.title || "Untitled Project"}
+    </h2>
+
+    <p className="text-white/80 max-w-xl">
+      {project?.lyrics || "Your lyrics appear here"}
+    </p>
+  </div>
+</div>
 
       {/* Playback controls */}
       <div className="flex items-center gap-4">
