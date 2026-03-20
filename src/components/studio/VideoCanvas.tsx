@@ -3,16 +3,6 @@ import { Play, Pause, SkipBack, SkipForward, Maximize2, Volume2 } from "lucide-r
 
 type AspectRatio = "9:16" | "1:1" | "16:9" | "4:5";
 
-const handleToggle = () => {
-  if (!audioRef.current || !project?.audio_url) return;
-
-  if (audioRef.current.paused) {
-    audioRef.current.play();
-  } else {
-    audioRef.current.pause();
-  }
-};
-
 const aspectStyles: Record<AspectRatio, { css: string; label: string; platforms: string }> = {
   "9:16": { css: "aspect-[9/16] max-h-[420px]", label: "9:16", platforms: "TikTok · Reels · Shorts" },
   "1:1": { css: "aspect-square max-h-[420px]", label: "1:1", platforms: "Instagram Post" },
@@ -27,9 +17,9 @@ interface VideoCanvasProps {
   onPlayPause: () => void;
   onSeek: (time: number) => void;
   project: any;
-};
+}
 
-const VideoCanvas = ({ currentTime, totalTime, isPlaying, onPlayPause, onSeek }: VideoCanvasProps) => {
+const VideoCanvas = ({ currentTime, totalTime, isPlaying, onPlayPause, onSeek, project }: VideoCanvasProps) => {
   const [aspect, setAspect] = useState<AspectRatio>("9:16");
 
   const formatTime = (seconds: number) => {
@@ -58,32 +48,29 @@ const VideoCanvas = ({ currentTime, totalTime, isPlaying, onPlayPause, onSeek }:
       <div
         className={`${aspectStyles[aspect].css} w-full max-w-md bg-card rounded-lg border border-border flex items-center justify-center relative overflow-hidden transition-all duration-300`}
       >
-      <div className="relative w-full h-full overflow-hidden rounded-2xl border border-white/10 bg-black/30">
+        <div className="relative w-full h-full overflow-hidden rounded-2xl border border-white/10 bg-black/30">
+          {project?.cover_image ? (
+            <img
+              src={project.cover_image}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/20 via-purple-500/10 to-cyan-500/20" />
+          )}
 
-  {project?.cover_image ? (
-    <img
-      src={project.cover_image}
-      className="absolute inset-0 w-full h-full object-cover"
-    />
-  ) : (
-    <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/20 via-purple-500/10 to-cyan-500/20" />
-  )}
-
-  <div className="relative z-10 flex h-full flex-col items-center justify-center text-center p-6">
-    
-    <div className="text-xs text-white/60 mb-2">
-      {project?.format || "Preview"}
-    </div>
-
-    <h2 className="text-2xl font-semibold text-white mb-2">
-      {project?.title || "Untitled Project"}
-    </h2>
-
-    <p className="text-white/80 max-w-xl">
-      {project?.lyrics || "Your lyrics appear here"}
-    </p>
-  </div>
-</div>
+          <div className="relative z-10 flex h-full flex-col items-center justify-center text-center p-6">
+            <div className="text-xs text-muted-foreground mb-2">
+              {project?.format || "Preview"}
+            </div>
+            <h2 className="text-2xl font-semibold text-foreground mb-2">
+              {project?.title || "Untitled Project"}
+            </h2>
+            <p className="text-muted-foreground max-w-xl">
+              {project?.lyrics || "Your lyrics appear here"}
+            </p>
+          </div>
+        </div>
+      </div>
 
       {/* Playback controls */}
       <div className="flex items-center gap-4">
